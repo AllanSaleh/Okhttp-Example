@@ -5,9 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 {
 
                     final String myResponse = response.body().string();
+                    Gson gson = new Gson();
+                    Type postType = new TypeToken<ArrayList<Post>>(){}.getType();
+                    final ArrayList<Post> posts = gson.fromJson(myResponse,postType);
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            textViewResult.setText(myResponse);
+                            textViewResult.setText(posts.get(0).getText());
                         }
                     });
                 }
